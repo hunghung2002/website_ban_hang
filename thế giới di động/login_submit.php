@@ -1,0 +1,23 @@
+<?php
+    session_start();
+    include 'config.php';
+    if(isset($_POST['submit']) && $_POST["username"] != '' ) {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        $password = md5($password);
+        $sql = "SELECT * FROM user WHERE username='$username'AND password='$password' ";
+        $user = mysqli_query($conn,$sql);
+        if(mysqli_num_rows($user) > 0) {
+            echo "<script>alert('Đã đăng nhập thành công')</script>";
+            $_SESSION["user"] = $username;
+            header("location:index.php");
+        }
+        else {
+            $_SESSION["thongbao"]= "Sai tên hoặc mật khẩu";
+            header("location:login.php");   
+        }
+    } else {
+        $_SESSION["thongbao"]= "Vui lòng nhập đầy đủ thông tin";
+        header("location:register.php");
+    }
+ ?>
